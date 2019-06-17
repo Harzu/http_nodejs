@@ -10,24 +10,26 @@ const app = net.createServer(requestSocket => {
   ))
 })
 
+static(path.join(__dirname, '../tests/static'), route)
+
 route.get('/', (req, res) => {
-  res.htmlRender(path.join(__dirname, '../tests/static', 'index.html'))
-  res.send()
+  res.sendFile(path.join(__dirname, '../tests/static', 'index.html'))
+  res.end()
 })
 
 route.get('/text', (req, res) => {
   res.text('Hello')
-  res.send()
+  res.end()
 })
 
 route.get('/json', (req, res) => {
   res.json(JSON.stringify('{a: 1}'))
-  res.send()
+  res.end()
 })
 
 route.post('/set', (req, res) => {
   res.json(JSON.stringify(req.Body()))
-  res.send()
+  res.end()
 })
 
 process.on('SIGINT', () => app.close(err => console.log(err)))

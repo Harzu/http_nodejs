@@ -1,4 +1,6 @@
 const fs = require('fs')
+const path = require('path')
+const mime = require('mime-types')
 const codeTable = require('../../status-code.json')
 
 class Response {
@@ -41,8 +43,10 @@ class Response {
     this.responseData.body = String(data)
   }
 
-  htmlRender(filePath) {
-    this.setHeader('Content-Type', 'text/html')
+  sendFile(filePath) {
+    const basename = path.basename(filePath)
+    const contentType = mime.contentType(basename)
+    this.setHeader('Content-Type', contentType)
 
     try {
       const fileData = fs.readFileSync(filePath)
@@ -53,7 +57,7 @@ class Response {
     }
   }
 
-  send() {
+  end() {
     let generateResponse = `HTTP/1.1 ${this.responseData.statusCode} ${this.responseData.statusMessage}`
     for (const header in this.responseData.headers) {
       const headerString = `\n${header}: ${this.responseData.headers[header]}`

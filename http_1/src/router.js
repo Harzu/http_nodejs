@@ -20,23 +20,34 @@ class Route {
     if (this.registredRouts[requestData.method].has(HTTPRequest.URI())) {
       const callback = this.registredRouts[requestData.method].get(HTTPRequest.URI())
       callback(HTTPRequest, HTTPResponse)
+    } else {
+      HTTPResponse.status(404)
+      HTTPResponse.end()
     }
   }
 
   get(route, callback = (req, res) => {}) {
-    this.registredRouts.GET.set(route, callback)
+    if (!this.registredRouts.GET.has(route)) {
+      this.registredRouts.GET.set(route, callback)
+    }
   }
 
   post(route, callback = (req, res) => {}) {
-    this.registredRouts.POST.set(route, callback)
+    if (!this.registredRouts.POST.has(route)) {
+      this.registredRouts.POST.set(route, callback)
+    }
   }
 
   put(route, callback = (req, res) => {}) {
-    this.registredRouts.PUT.set(route, callback)
+    if (!this.registredRouts.PUT.has(route)) {
+      this.registredRouts.PUT.set(route, callback)
+    }
   }
 
   delete(route, callback = (req, res) => {}) {
-    this.registredRouts.DELETE.set(route, callback)
+    if (!this.registredRouts.DELETE.has(route)) {
+      this.registredRouts.DELETE.set(route, callback)
+    }
   }
 }
 
