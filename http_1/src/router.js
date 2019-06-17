@@ -51,4 +51,4 @@ class Route {
   }
 }
 
-module.exports = new Route
+module.exports = Route

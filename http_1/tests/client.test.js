@@ -1,39 +1,34 @@
 const net = require('net')
 const { expect } = require('chai')
 const parser = require('http-string-parser')
-const route = require('../src/router')
+const App = require('../src/index')
 
-let app = null
+let app = new App
 let client = null
 const HOST = '127.0.0.1'
 const PORT = 3000
 
 describe('http test', () => {
   beforeEach(() => {
-    app = net.createServer(requestSocket => {
-      requestSocket.on('data', data => route.socketHandler(
-          data.toString(),
-          requestSocket
-      ))
-    })
+    app.createServer()
 
-    route.get('/testJson', (req, res) => {
+    app.get('/testJson', (req, res) => {
       res.json(JSON.stringify({ a: 1 }))
       res.end()
     })
 
-    route.get('/testtext', (req, res) => {
+    app.get('/testtext', (req, res) => {
       res.text('Hello world')
       res.end()
     })
 
-    route.post('/body', (req, res) => {
+    app.post('/body', (req, res) => {
       const body = req.reqParams.body
       res.json(body)
       res.end() 
     })
 
-    process.on('SIGINT', () => app.close(err => console.log(err)))
+    process.on('SIGINT', () => app.closeServer())
     app.listen(PORT, HOST, () => console.log(`server start to http://${HOST}:${PORT}`))
 
     client = net.connect({
@@ -43,7 +38,7 @@ describe('http test', () => {
   })
 
   afterEach(() => {
-    app.close(err => console.log(err))
+    app.closeServer()
     client.removeAllListeners('data')
     client.destroy()
     client.end()

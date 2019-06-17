@@ -4,8 +4,8 @@
   "main": "src/app.js",
   "license": "MIT",
   "scripts": {
-    "start": "node ./src/app.js",
-    "test": "mocha -exit ./tests/client.js"
+    "start": "node ./examples/app.js",
+    "test": "mocha -exit ./tests/*.test.js"
   },
   "dependencies": {
     "http-string-parser": "^0.0.6",
